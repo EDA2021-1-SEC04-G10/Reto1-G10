@@ -37,10 +37,10 @@ operación solicitada
 def printMenu():
     print("Bienvenido")
     print("1- Cargar información de videos en el catálogo")
-    print("2- Consultador videos con más views por categoría y país")
+    print("2- Consultar videos tendencia con más views por categoría y país")
     print("3- Consultar video tendencia por país")
     print("4- Consultar video tendencia por categoría")
-    print("5- Consultar videos con más likes por país")
+    print("5- Consultar videos con más likes por tag")
     print("0- Salir")
 
 def initCatalog():
@@ -71,6 +71,15 @@ while True:
         print("Category id cargadas: " + str(lt.size(catalog['categoryid'])))
 
     elif int(inputs[0]) == 2:
+        pass
+
+    elif int(inputs[0]) == 3:
+        pass
+
+    elif int(inputs[0]) == 4:
+        pass
+
+    elif int(inputs[0]) == 5:
         pass
 
     else:
