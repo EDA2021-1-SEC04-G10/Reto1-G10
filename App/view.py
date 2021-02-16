@@ -55,6 +55,27 @@ def loadData(catalog):
     """
     controller.loadData(catalog)
 
+def printFirstVideo():
+    """
+    Imprime la información del primer video de la lista
+    """
+    print("El primer video cargado es: ")
+    print("Título: " + lt.firstElement(catalog['videos'])['title'])
+    print("Canal: " + lt.firstElement(catalog['videos'])['channel_title'])
+    print("Fecha de tendencia: " + lt.firstElement(catalog['videos'])['trending_date'])
+    print("País: " + lt.firstElement(catalog['videos'])['country'])
+    print("Views: " + lt.firstElement(catalog['videos'])['views'])
+    print("Likes: " + lt.firstElement(catalog['videos'])['likes'])
+    print("Dislikes: " + lt.firstElement(catalog['videos'])['dislikes'])
+
+def printCategoryList():
+    """
+    Imprime la lista de categorías cargadas
+    """
+    print("Las categorías cargadas son: ")
+    for category in lt.iterator(catalog['categoryid']):
+        print(category['id\tname'])
+
 catalog = None
 
 """
@@ -68,7 +89,8 @@ while True:
         catalog = initCatalog()
         loadData(catalog)
         print("Videos cargados: " + str(lt.size(catalog['videos'])))
-        print("Category id cargadas: " + str(lt.size(catalog['categoryid'])))
+        printFirstVideo()
+        printCategoryList()
 
     elif int(inputs[0]) == 2:
         pass
