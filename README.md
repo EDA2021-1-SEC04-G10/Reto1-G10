@@ -1,10 +1,10 @@
 # Reto No. 1 :clapper:
 
 ## Autores :writing_hand:
-* Hernán Buitrago 
+* Hernán Buitrago - Req :two:
   * hf.buitrago10@uniandes.edu.co
   * 201512807
-* Daniel Aguilera
+* Daniel Aguilera - Req :three:
   * d.aguilera@uniandes.edu.co
   * 202010592
 
