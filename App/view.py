@@ -76,6 +76,19 @@ def printCategoryList():
     for category in lt.iterator(catalog['categoryid']):
         print(category['id\tname'])
 
+def printSortedVideos(sortedvideos, sample=10):
+    """
+    Imprime la información de los primeros videos ordenados
+    """
+    size = lt.size(sortedvideos)
+    if size > sample:
+        print("Los primeros " + str(sample) + " videos ordenados son: ")
+        i = 0
+        while i <= sample:
+            video = lt.getElement(sortedvideos, i)
+            print("Título: " + video['title'] + "  Views:  " + video['views'])
+            i += 1
+
 catalog = None
 
 """
@@ -94,7 +107,14 @@ while True:
         printCategoryList()
 
     elif int(inputs[0]) == 2:
-        pass
+        size = int(input('Ingrese el tamaño de la muestra\n'))
+        if size > lt.size(catalog['videos']):
+            print("El tamaño de muestra excede el tamaño del catálogo")
+        else:
+            sortingAlgorithm = str(input('Seleccione el algoritmo de ordenamiento\nshell sort, insertion sort o selection sort\n'))
+            sortedVideos = controller.sortVideos(catalog, size, sortingAlgorithm)
+            print("Para la muestra de " + str(size) + " elementos, el tiempo (mseg) es: " + str(sortedVideos[0]))
+            printSortedVideos(sortedVideos[1])
 
     elif int(inputs[0]) == 3:
         pass
