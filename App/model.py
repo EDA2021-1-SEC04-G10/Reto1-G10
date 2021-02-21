@@ -26,8 +26,11 @@
 
 
 import config as cf
+import time
 from DISClib.ADT import list as lt
 from DISClib.Algorithms.Sorting import shellsort as sa
+from DISClib.Algorithms.Sorting import insertionsort as si
+from DISClib.Algorithms.Sorting import selectionsort as se
 assert cf
 
 """
@@ -70,4 +73,44 @@ def addCategoryId(catalog, categoryid):
 
 # Funciones utilizadas para comparar elementos dentro de una lista
 
+def cmpVideosByViews(video1, video2):
+    """
+    Devuelve verdadero si los 'views' del video1 son menores que los 'views'
+    del video2
+
+    Args:
+        video1: información del primer video que incluye su valor de 'views'
+        video2: información del segundo video que incluye su valor de 'views'
+    """
+    return (float(video1['views']) > float(video2['views']))
+
 # Funciones de ordenamiento
+
+def sortVideos(catalog, size, sortingalgorithm):
+    """
+    Crea una sublista ordenada de acuerdo al algoritmo de ordenamiento
+    seleccionado
+
+    Args:
+        catalog: catálogo en el que se alamcenan las peliculas
+        size: tamaño de la sublista creada
+        sortingalgoritm: algoritmo de ordernamiento utilizado
+    
+    Returns:
+        La sublista ordenada
+    """
+    subList = lt.subList(catalog['videos'], 0, size)
+    subList = subList.copy()
+    startTime = time.process_time()
+
+    if sortingalgorithm == 'shell sort':
+        sortedList = sa.sort(subList, cmpVideosByViews)
+    elif sortingalgorithm == 'insertion sort':
+        sortedList = si.sort(subList, cmpVideosByViews)
+    else:
+        sortedList = se.sort(subList, cmpVideosByViews)
+
+    stopTime = time.process_time()
+    elapsepTimeMseg = (stopTime - startTime)*1000
+
+    return elapsepTimeMseg, sortedList
