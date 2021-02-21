@@ -37,7 +37,7 @@ los mismos.
 
 # Construccion de modelos
 
-def newCatalog():
+def newCatalog(datastructure):
     """
     Inicializa el catalogo de videos. Crea una lista para guardar
     todos los videos y crea una lista para guardar las category id
@@ -45,8 +45,8 @@ def newCatalog():
     """
     catalog = {'videos': None, 'categoryid': None}
 
-    catalog['videos'] = lt.newList()
-    catalog['categoryid'] = lt.newList()
+    catalog['videos'] = lt.newList(datastructure=datastructure)
+    catalog['categoryid'] = lt.newList(datastructure=datastructure)
 
     return catalog
 
