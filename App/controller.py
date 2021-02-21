@@ -31,11 +31,11 @@ El controlador se encarga de mediar entre la vista y el modelo.
 
 # Inicialización del Catálogo de libros
 
-def initCatalog():
+def initCatalog(datastructure):
     """
     Llama la función de inicialización del catalogo al modelo
     """
-    catalog = model.newCatalog()
+    catalog = model.newCatalog(datastructure)
     return catalog
 
 # Funciones para la carga de datos
