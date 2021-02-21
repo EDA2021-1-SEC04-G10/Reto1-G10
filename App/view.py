@@ -43,11 +43,11 @@ def printMenu():
     print("5- Consultar videos con más likes por tag")
     print("0- Salir")
 
-def initCatalog():
+def initCatalog(datastructure):
     """
     Inicializa el catalogo de videos
     """
-    return controller.initCatalog()
+    return controller.initCatalog(datastructure)
 
 def loadData(catalog):
     """
@@ -85,8 +85,9 @@ while True:
     printMenu()
     inputs = input('Seleccione una opción para continuar\n')
     if int(inputs[0]) == 1:
+        datastructure = str(input('Seleccione la estructura de datos\nARRAY_LIST o SINGLE_LINKED\n'))
         print("Cargando información de los archivos ....")
-        catalog = initCatalog()
+        catalog = initCatalog(datastructure)
         loadData(catalog)
         print("Videos cargados: " + str(lt.size(catalog['videos'])))
         printFirstVideo()
