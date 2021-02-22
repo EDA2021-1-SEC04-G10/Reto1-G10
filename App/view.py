@@ -80,10 +80,10 @@ def printSortedVideos(sortedvideos, sample=10):
     """
     Imprime la información de los primeros videos ordenados
     """
-    size = lt.size(sortedvideos)
+    size = int(lt.size(sortedvideos))
     if size > sample:
         print("Los primeros " + str(sample) + " videos ordenados son: ")
-        i = 0
+        i = 1
         while i <= sample:
             video = lt.getElement(sortedvideos, i)
             print("Título: " + video['title'] + "  Views:  " + video['views'])
