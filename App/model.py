@@ -46,10 +46,13 @@ def newCatalog(datastructure):
     todos los videos y crea una lista para guardar las category id
     Retorna el catalogo inicializado
     """
-    catalog = {'videos': None, 'categoryid': None}
+    catalog = {'videos': None,
+                'categoryid': None}
 
-    catalog['videos'] = lt.newList(datastructure=datastructure)
-    catalog['categoryid'] = lt.newList(datastructure=datastructure)
+    catalog['videos'] = lt.newList(datastructure=datastructure,
+                                    cmpfunction=cmpVideos)
+    catalog['categoryid'] = lt.newList(datastructure=datastructure,
+                                        cmpfunction=cmpCategoryId)
 
     return catalog
 
@@ -73,6 +76,14 @@ def addCategoryId(catalog, categoryid):
 
 # Funciones utilizadas para comparar elementos dentro de una lista
 
+def cmpVideos(videotitle, video):
+    if (videotitle.lower() in video['title'].lower()):
+        return -1
+    return 0
+
+def cmpCategoryId(categoryname, category):
+    return (categoryname == category['categoryname'])
+
 def cmpVideosByViews(video1, video2):
     """
     Devuelve verdadero si los 'views' del video1 son menores que los 'views'
@@ -92,14 +103,14 @@ def sortVideos(catalog, size, sortingalgorithm):
     seleccionado
 
     Args:
-        catalog: catálogo en el que se alamcenan las peliculas
-        size: tamaño de la sublista creada
-        sortingalgoritm: algoritmo de ordernamiento utilizado
+        catalog: catálogo en el que se alamcenan los videos
+        size: tamaño seleccionado de la sublista 
+        sortingalgoritm: algoritmo de ordernamiento seleccionado
     
     Returns:
-        La sublista ordenada
+        La sublista ordenada de videos
     """
-    subList = lt.subList(catalog['videos'], 0, size)
+    subList = lt.subList(catalog['videos'], 1, size)
     subList = subList.copy()
     startTime = time.process_time()
 
@@ -107,7 +118,7 @@ def sortVideos(catalog, size, sortingalgorithm):
         sortedList = sa.sort(subList, cmpVideosByViews)
     elif sortingalgorithm == 'insertion sort':
         sortedList = si.sort(subList, cmpVideosByViews)
-    else:
+    elif sortingalgorithm == 'selection sort':
         sortedList = se.sort(subList, cmpVideosByViews)
 
     stopTime = time.process_time()
