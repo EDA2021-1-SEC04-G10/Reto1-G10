@@ -24,5 +24,5 @@ La estructura del repositorio es la siguiente:
 
 |-- Algorithms: Implementación de los algoritmos vistos en el curso.
 
-|-- Utils: Funciones auxiliares para el funcionamiento de los TADs y estructuras de datos.
+|-- Utils: Funciones auxiliares para el funcionamiento de los TADs y las estructuras de datos.
 ```
