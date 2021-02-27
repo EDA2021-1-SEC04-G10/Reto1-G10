@@ -31,6 +31,8 @@ from DISClib.ADT import list as lt
 from DISClib.Algorithms.Sorting import shellsort as sa
 from DISClib.Algorithms.Sorting import insertionsort as si
 from DISClib.Algorithms.Sorting import selectionsort as se
+from DISClib.Algorithms.Sorting import quicksort as qs
+from DISClib.Algorithms.Sorting import mergesort as ms
 assert cf
 
 """
@@ -114,12 +116,16 @@ def sortVideos(catalog, size, sortingalgorithm):
     subList = subList.copy()
     startTime = time.process_time()
 
-    if sortingalgorithm == 'shell sort':
+    if sortingalgorithm == 1:
         sortedList = sa.sort(subList, cmpVideosByViews)
-    elif sortingalgorithm == 'insertion sort':
+    elif sortingalgorithm == 2:
         sortedList = si.sort(subList, cmpVideosByViews)
-    elif sortingalgorithm == 'selection sort':
+    elif sortingalgorithm == 3:
         sortedList = se.sort(subList, cmpVideosByViews)
+    elif sortingalgorithm == 4:
+        sortedList = qs.sort(subList, cmpVideosByViews)
+    elif sortingalgorithm == 5:
+        sortedList = ms.sort(subList, cmpVideosByViews)
 
     stopTime = time.process_time()
     elapsepTimeMseg = (stopTime - startTime)*1000
