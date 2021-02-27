@@ -26,6 +26,7 @@ import controller
 from DISClib.ADT import list as lt
 assert cf
 
+sys.setrecursionlimit(1000*10)
 
 """
 La vista se encarga de la interacción con el usuario
@@ -98,7 +99,11 @@ while True:
     printMenu()
     inputs = input('Seleccione una opción para continuar\n')
     if int(inputs[0]) == 1:
-        datastructure = str(input('Seleccione la estructura de datos\nARRAY_LIST o SINGLE_LINKED\n'))
+        datastructure = int(input('Seleccione la estructura de datos\n1- ARRAY_LIST\n2- SINGLE_LINKED\n'))
+        if datastructure == 1:
+            datastructure = 'ARRAY_LIST'
+        elif datastructure == 2:
+            datastructure = 'SINGLE_LINKED'
         print("Cargando información de los archivos ....")
         catalog = initCatalog(datastructure)
         loadData(catalog)
@@ -111,7 +116,7 @@ while True:
         if size > lt.size(catalog['videos']):
             print("El tamaño de muestra excede el tamaño del catálogo")
         else:
-            sortingAlgorithm = str(input('Seleccione el algoritmo de ordenamiento\nshell sort, insertion sort o selection sort\n'))
+            sortingAlgorithm = int(input('Seleccione el algoritmo de ordenamiento\n1- shell sort\n2- insertion sort\n3- selection sort\n4- quick sort\n5- merge sort\n'))
             sortedVideos = controller.sortVideos(catalog, size, sortingAlgorithm)
             print("Para la muestra de " + str(size) + " elementos, el tiempo (mseg) es: " + str(sortedVideos[0]))
             printSortedVideos(sortedVideos[1])
