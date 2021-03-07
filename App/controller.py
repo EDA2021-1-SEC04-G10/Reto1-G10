@@ -31,11 +31,11 @@ El controlador se encarga de mediar entre la vista y el modelo.
 
 # Inicialización del Catálogo de libros
 
-def initCatalog(datastructure):
+def initCatalog():
     """
     Llama la función de inicialización del catalogo al modelo
     """
-    catalog = model.newCatalog(datastructure)
+    catalog = model.newCatalog()
     return catalog
 
 # Funciones para la carga de datos
@@ -61,16 +61,64 @@ def loadCategoryId(catalog):
     Carga las categorias del archivo
     """
     categoryidfile = cf.data_dir + 'videos/category-id.csv'
-    input_file = csv.DictReader(open(categoryidfile, encoding='utf-8'))
+    input_file = csv.DictReader(open(categoryidfile, encoding='utf-8'), delimiter='\t')
     for categoryid in input_file:
         model.addCategoryId(catalog, categoryid)
 
 # Funciones de ordenamiento
 
-def sortVideos(catalog, size, sortingalgorithm):
+def sortVideosByViews(catalog):
     """
     Ordena los videos por 'views'
     """
-    return model.sortVideos(catalog, size, sortingalgorithm)
+    return model.sortVideosByViews(catalog)
+
+def sortVideosById(catalog):
+    """
+    Ordena los videos por 'video_id'
+    """
+    return model.sortVideosById(catalog)
+
+def sortVideosByLikes(catalog):
+    """
+    Ordena los videos por 'likes'
+    """
+    return model.sortVideosByLikes(catalog)
 
 # Funciones de consulta sobre el catálogo
+
+def getCategoryId(catalog, categoryname):
+    """
+    Retorna el 'id' de una categoría por su nombre
+    """
+    return model.getCategoryId(catalog, categoryname)
+
+def getVideosByCategory(catalog, categoryid):
+    """
+    Retorna los videos de la categoría seleccionada
+    """
+    return model.getVideosByCategory(catalog, categoryid)
+
+def getVideosByCountry(catalog, country):
+    """
+    Retorna los videos del país seleccionado
+    """
+    return model.getVideosByCountry(catalog, country)
+
+def getVideosByCategoryAndCountry(catalog, categoryid, country):
+    """
+    Retorna los videos de la categoría y país seleccionados
+    """
+    return model.getVideosByCategoryAndCountry(catalog, categoryid, country)
+
+def getVideosByCountryAndTag(catalog, country, tag):
+    """
+    Retorna los videos del país y tag seleccionados
+    """
+    return model.getVideosByCountryAndTag(catalog, country, tag)
+
+def getFirstVideoByTrendingDays(catalog):
+    """
+    Retorna la información del video con más 'trending days'
+    """
+    return model.getFirstVideoByTrendingDays(catalog)
