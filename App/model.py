@@ -28,10 +28,6 @@
 import config as cf
 import time
 from DISClib.ADT import list as lt
-from DISClib.Algorithms.Sorting import shellsort as sa
-from DISClib.Algorithms.Sorting import insertionsort as si
-from DISClib.Algorithms.Sorting import selectionsort as se
-from DISClib.Algorithms.Sorting import quicksort as qs
 from DISClib.Algorithms.Sorting import mergesort as ms
 assert cf
 
@@ -42,7 +38,7 @@ los mismos.
 
 # Construccion de modelos
 
-def newCatalog(datastructure):
+def newCatalog():
     """
     Inicializa el catalogo de videos. Crea una lista para guardar
     todos los videos y crea una lista para guardar las category id
@@ -51,9 +47,9 @@ def newCatalog(datastructure):
     catalog = {'videos': None,
                 'categoryid': None}
 
-    catalog['videos'] = lt.newList(datastructure=datastructure,
+    catalog['videos'] = lt.newList(datastructure='ARRAY_LIST',
                                     cmpfunction=cmpVideos)
-    catalog['categoryid'] = lt.newList(datastructure=datastructure,
+    catalog['categoryid'] = lt.newList(datastructure='ARRAY_LIST',
                                         cmpfunction=cmpCategoryId)
 
     return catalog
@@ -62,13 +58,13 @@ def newCatalog(datastructure):
 
 def addVideo(catalog, video):
     """
-    Adicionar un video a la lista de videos
+    Adiciona un video a la lista de videos
     """
     lt.addLast(catalog['videos'], video)
 
 def addCategoryId(catalog, categoryid):
     """
-    Adicionar un category id a la lista de category id
+    Adiciona un category id a la lista de category id
     """
     lt.addLast(catalog['categoryid'], categoryid)
 
@@ -76,6 +72,65 @@ def addCategoryId(catalog, categoryid):
 
 # Funciones de consulta
 
+def getCategoryId(catalog, categoryname):
+    """
+    Obtiene el 'id' de una categoría por su nombre
+    """
+    for category in lt.iterator(catalog['categoryid']):
+        if categoryname in category['name']:
+            return category['id']
+
+def getVideosByCategory(catalog, categoryid):
+    """
+    Crea la lista de videos de la categoría seleccionada
+    """
+    videosByCategory = lt.newList(datastructure='ARRAY_LIST',
+                                        cmpfunction=cmpVideos)
+    for video in lt.iterator(catalog['videos']):
+        if categoryid == video['category_id']:
+            lt.addLast(videosByCategory, video)
+    return videosByCategory
+
+def getVideosByCountry(catalog, country):
+    """
+    Crea la lista de videos del país seleccionado
+    """
+    videosByCountry = lt.newList(datastructure='ARRAY_LIST',
+                                        cmpfunction=cmpVideos)
+    for video in lt.iterator(catalog['videos']):
+        if country == video['country']:
+            lt.addLast(videosByCountry, video)
+    return videosByCountry
+
+def getVideosByCategoryAndCountry(catalog, categoryid, country):
+    """
+    Crea la lista de videos de la categoría y país seleccionados
+    """
+    videosByCategoryAndCountry = lt.newList(datastructure='ARRAY_LIST',
+                                            cmpfunction=cmpVideos)
+    for video in lt.iterator(catalog['videos']):
+        if categoryid == video['category_id'] and country == video['country']:
+            lt.addLast(videosByCategoryAndCountry, video)
+    return videosByCategoryAndCountry
+
+def getFirstVideoByTrendingDays(catalog):
+    """
+    Retorna la infomación del video con mas'trending days'
+    """
+    pass
+
+def getVideosByCountryAndTag(catalog, country, tag):
+    """
+    Crea la lista de videos del país y tag seleccionados
+    """
+    subTag = "\"" + tag + "\""
+    videosByCountryAndTag = lt.newList(datastructure='ARRAY_LIST',
+                                            cmpfunction=cmpVideos)
+    for video in lt.iterator(catalog['videos']):
+        if country == video['country'] and subTag in video['tags']:
+            lt.addLast(videosByCountryAndTag, video)
+    return videosByCountryAndTag
+    
 # Funciones utilizadas para comparar elementos dentro de una lista
 
 def cmpVideos(videotitle, video):
@@ -88,46 +143,41 @@ def cmpCategoryId(categoryname, category):
 
 def cmpVideosByViews(video1, video2):
     """
-    Devuelve verdadero si los 'views' del video1 son menores que los 'views'
-    del video2
-
-    Args:
-        video1: información del primer video que incluye su valor de 'views'
-        video2: información del segundo video que incluye su valor de 'views'
+    Compara dos videos por su número de 'views'
     """
     return (float(video1['views']) > float(video2['views']))
 
+def cmpVideosById(video1, video2):
+    """
+    Compara dos videos por su 'video_id'
+    """
+    return (str(video1['video_id']) > str(video2['video_id']))
+
+def cmpVideosByLikes(video1, video2):
+    """
+    Compara dos videos por su número de 'likes'
+    """
+    return (float(video1['likes']) > float(video2['likes']))
+
 # Funciones de ordenamiento
 
-def sortVideos(catalog, size, sortingalgorithm):
+def sortVideosByViews(catalog):
     """
-    Crea una sublista ordenada de acuerdo al algoritmo de ordenamiento
-    seleccionado
-
-    Args:
-        catalog: catálogo en el que se alamcenan los videos
-        size: tamaño seleccionado de la sublista 
-        sortingalgoritm: algoritmo de ordernamiento seleccionado
-    
-    Returns:
-        La sublista ordenada de videos
+    Ordena el catálogo de videos por su número de 'views'
     """
-    subList = lt.subList(catalog['videos'], 1, size)
-    subList = subList.copy()
-    startTime = time.process_time()
+    sortVideosByViews = ms.sort(catalog, cmpVideosByViews)
+    return sortVideosByViews
 
-    if sortingalgorithm == 1:
-        sortedList = sa.sort(subList, cmpVideosByViews)
-    elif sortingalgorithm == 2:
-        sortedList = si.sort(subList, cmpVideosByViews)
-    elif sortingalgorithm == 3:
-        sortedList = se.sort(subList, cmpVideosByViews)
-    elif sortingalgorithm == 4:
-        sortedList = qs.sort(subList, cmpVideosByViews)
-    elif sortingalgorithm == 5:
-        sortedList = ms.sort(subList, cmpVideosByViews)
+def sortVideosById(catalog):
+    """
+    Ordena el catalogo de videos por sus 'video_id'
+    """
+    sortVideosById = ms.sort(catalog, cmpVideosById)
+    return sortVideosById
 
-    stopTime = time.process_time()
-    elapsepTimeMseg = (stopTime - startTime)*1000
-
-    return elapsepTimeMseg, sortedList
+def sortVideosByLikes(catalog):
+    """
+    Ordena el catalogo de videos por su número de 'likes'
+    """
+    sortVideosByLikes = ms.sort(catalog, cmpVideosByLikes)
+    return sortVideosByLikes
