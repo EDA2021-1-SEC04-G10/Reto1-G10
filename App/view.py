@@ -44,11 +44,11 @@ def printMenu():
     print("5- Consultar videos con más likes por tag")
     print("0- Salir")
 
-def initCatalog(datastructure):
+def initCatalog():
     """
     Inicializa el catalogo de videos
     """
-    return controller.initCatalog(datastructure)
+    return controller.initCatalog()
 
 def loadData(catalog):
     """
@@ -56,38 +56,56 @@ def loadData(catalog):
     """
     controller.loadData(catalog)
 
-def printFirstVideo():
+def printFirstVideo(catalog):
     """
     Imprime la información del primer video de la lista
     """
+    firstVideo = lt.firstElement(catalog['videos'])
     print("El primer video cargado es: ")
-    print("Título: " + lt.firstElement(catalog['videos'])['title'])
-    print("Canal: " + lt.firstElement(catalog['videos'])['channel_title'])
-    print("Fecha de tendencia: " + lt.firstElement(catalog['videos'])['trending_date'])
-    print("País: " + lt.firstElement(catalog['videos'])['country'])
-    print("Views: " + lt.firstElement(catalog['videos'])['views'])
-    print("Likes: " + lt.firstElement(catalog['videos'])['likes'])
-    print("Dislikes: " + lt.firstElement(catalog['videos'])['dislikes'])
+    print("Título: " + firstVideo['title'] + "  Canal: " + firstVideo['channel_title'] +
+    "  Fecha de tendencia: " + firstVideo['trending_date'] + "  País: " + firstVideo['country'] +
+    "  Views: " + firstVideo['views'] + "  Likes: " + firstVideo['likes'] + "  Dislikes: " + firstVideo['dislikes'])
 
-def printCategoryList():
+def printCategoryList(catalog):
     """
     Imprime la lista de categorías cargadas
     """
     print("Las categorías cargadas son: ")
     for category in lt.iterator(catalog['categoryid']):
-        print(category['id\tname'])
+        print(category['id'] + category['name'])
 
-def printSortedVideos(sortedvideos, sample=10):
+def printSortedVideosByViews(sortedvideos, sample, categoryname, country):
     """
-    Imprime la información de los primeros videos ordenados
+    Imprime la información de los videos con más views de un país
+    y categoría específica
     """
     size = int(lt.size(sortedvideos))
     if size > sample:
-        print("Los primeros " + str(sample) + " videos ordenados son: ")
+        print("Los " + str(sample) + " videos con más views de la categoría " + str(categoryname) +
+        " de " + str(country) + " son: ")
         i = 1
         while i <= sample:
             video = lt.getElement(sortedvideos, i)
-            print("Título: " + video['title'] + "  Views:  " + video['views'])
+            print("Fecha de tendencia: " + video['trending_date'] + "  Título: " + video['title'] + 
+            "  Canal: " + video['channel_title'] + "  Fecha de publicación: " + video['publish_time'] +
+            "  Views: " + video['views'] + "  Likes: " + video['likes'] + "  Dislikes: " + video['dislikes'])
+            i += 1
+
+def printSortedVideosByLikes(sortedvideos, sample, country, tag):
+    """
+    Imprime la información de los videos con más likes de un país
+    con un tag específico
+    """
+    size = int(lt.size(sortedvideos))
+    if size > sample:
+        print("Los " + str(sample) + " videos con más likes del país " + str(country) +
+        " con el tag " + str(tag) + " son: ")
+        i = 1
+        while i <= sample:
+            video = lt.getElement(sortedvideos, i)
+            print("Título: " + video['title'] + "  Canal: " + video['channel_title'] + "  Fecha de publicación: " +
+            video['publish_time'] + "  Views: " + video['views'] + "  Likes: " + video['likes'] + "  Dislikes:  " +
+            video['dislikes'] + "  Tags: " + video['tags'])
             i += 1
 
 catalog = None
@@ -97,38 +115,46 @@ Menu principal
 """
 while True:
     printMenu()
-    inputs = input('Seleccione una opción para continuar\n')
+    inputs = input("Seleccione una opción para continuar\n")
     if int(inputs[0]) == 1:
-        datastructure = int(input('Seleccione la estructura de datos\n1- ARRAY_LIST\n2- SINGLE_LINKED\n'))
-        if datastructure == 1:
-            datastructure = 'ARRAY_LIST'
-        elif datastructure == 2:
-            datastructure = 'SINGLE_LINKED'
         print("Cargando información de los archivos ....")
-        catalog = initCatalog(datastructure)
+        catalog = initCatalog()
         loadData(catalog)
-        print("Videos cargados: " + str(lt.size(catalog['videos'])))
-        printFirstVideo()
-        printCategoryList()
+        print("El número de videos cargados es: " + str(lt.size(catalog['videos'])))
+        printFirstVideo(catalog)
+        printCategoryList(catalog)
 
     elif int(inputs[0]) == 2:
-        size = int(input('Ingrese el tamaño de la muestra\n'))
-        if size > lt.size(catalog['videos']):
-            print("El tamaño de muestra excede el tamaño del catálogo")
+        categoryname = str(input("Ingrese la categoría\n"))
+        categoryid = controller.getCategoryId(catalog, categoryname)
+        country = str(input("Ingrese el país\n"))
+        size = int(input("Ingrese el número de videos a listar\n"))
+        videos = controller.getVideosByCategoryAndCountry(catalog, categoryid, country)
+        sortedVideos = controller.sortVideosByViews(videos)
+        if size > lt.size(videos):
+            print("El número de videos excede el tamaño del catálogo\n")
         else:
-            sortingAlgorithm = int(input('Seleccione el algoritmo de ordenamiento\n1- shell sort\n2- insertion sort\n3- selection sort\n4- quick sort\n5- merge sort\n'))
-            sortedVideos = controller.sortVideos(catalog, size, sortingAlgorithm)
-            print("Para la muestra de " + str(size) + " elementos, el tiempo (mseg) es: " + str(sortedVideos[0]))
-            printSortedVideos(sortedVideos[1])
+            printSortedVideosByViews(sortedVideos, size, categoryname, country)
 
     elif int(inputs[0]) == 3:
-        pass
+        country = str(input("Ingrese el país\n"))
+        videos = controller.getVideosByCountry(catalog, country)
+        sortedVideos = controller.sortVideosById(videos)
 
     elif int(inputs[0]) == 4:
-        pass
+        categoryname = str(input("Ingrese la categoría\n"))
+        categoryid = controller.getCategoryId(catalog, categoryname)
 
     elif int(inputs[0]) == 5:
-        pass
+        country = str(input("Ingrese el país\n"))
+        tag = str(input("Ingrese el tag\n"))
+        size = int(input("Ingrese el número de videos a listar\n"))
+        videos = controller.getVideosByCountryAndTag(catalog, country, tag)
+        sortedVideos = controller.sortVideosByLikes(videos)
+        if size > lt.size(videos):
+            print("El número de videos excede el tamaño del catálogo\n")
+        else:
+            printSortedVideosByLikes(sortedVideos, size, country, tag)
 
     else:
         sys.exit(0)
