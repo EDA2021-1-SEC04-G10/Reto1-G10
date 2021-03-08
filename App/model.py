@@ -40,9 +40,9 @@ los mismos.
 
 def newCatalog():
     """
-    Inicializa el catalogo de videos. Crea una lista para guardar
+    Inicializa el catálogo de videos. Crea una lista para guardar
     todos los videos y crea una lista para guardar las category id
-    Retorna el catalogo inicializado
+    Retorna el catálogo inicializado
     """
     catalog = {'videos': None,
                 'categoryid': None}
@@ -64,7 +64,7 @@ def addVideo(catalog, video):
 
 def addCategoryId(catalog, categoryid):
     """
-    Adiciona un category id a la lista de category id
+    Adiciona un 'category id' a la lista de category id
     """
     lt.addLast(catalog['categoryid'], categoryid)
 
@@ -115,15 +115,34 @@ def getVideosByCategoryAndCountry(catalog, categoryid, country):
 
 def getFirstVideoByTrendingDays(catalog):
     """
-    Retorna la infomación del video con mas'trending days'
+    Obtiene la infomación del video con más 'trending days'
+    y su respectivo número de 'trending days'
     """
-    pass
+    size = int(lt.size(catalog))
+    videosByTrendingDays = {}
+    i = 1
+    while i <= size:
+        videoId = lt.getElement(catalog, i)['video_id']
+        if videoId in videosByTrendingDays:
+            videosByTrendingDays[videoId] += 1
+        else:
+            videosByTrendingDays[videoId] = 1
+        i += 1
+    videosByTrendingDays.pop('#NAME?', None)
+    firstVideoByTrendingDaysKey = max(videosByTrendingDays, 
+                                        key=videosByTrendingDays.get)
+    firstVideoByTrendingDays = None
+    for video in lt.iterator(catalog):
+        if video['video_id'] == firstVideoByTrendingDaysKey:
+            firstVideoByTrendingDays = video
+    trendingDays = videosByTrendingDays[firstVideoByTrendingDaysKey]
+    return firstVideoByTrendingDays, trendingDays
 
 def getVideosByCountryAndTag(catalog, country, tag):
     """
     Crea la lista de videos del país y tag seleccionados
     """
-    subTag = "\"" + tag + "\""
+    subTag = tag
     videosByCountryAndTag = lt.newList(datastructure='ARRAY_LIST',
                                             cmpfunction=cmpVideos)
     for video in lt.iterator(catalog['videos']):
@@ -170,14 +189,14 @@ def sortVideosByViews(catalog):
 
 def sortVideosById(catalog):
     """
-    Ordena el catalogo de videos por sus 'video_id'
+    Ordena el catálogo de videos por sus 'video_id'
     """
     sortVideosById = ms.sort(catalog, cmpVideosById)
     return sortVideosById
 
 def sortVideosByLikes(catalog):
     """
-    Ordena el catalogo de videos por su número de 'likes'
+    Ordena el catálogo de videos por su número de 'likes'
     """
     sortVideosByLikes = ms.sort(catalog, cmpVideosByLikes)
     return sortVideosByLikes
