@@ -41,18 +41,18 @@ def printMenu():
     print("2- Consultar videos tendencia con más views por categoría y país")
     print("3- Consultar video tendencia por país")
     print("4- Consultar video tendencia por categoría")
-    print("5- Consultar videos con más likes por tag")
+    print("5- Consultar videos con más likes por país y tag")
     print("0- Salir")
 
 def initCatalog():
     """
-    Inicializa el catalogo de videos
+    Inicializa el catálogo de videos
     """
     return controller.initCatalog()
 
 def loadData(catalog):
     """
-    Carga la información de los videos al catalogo
+    Carga la información de los videos al catálogo
     """
     controller.loadData(catalog)
 
@@ -76,7 +76,7 @@ def printCategoryList(catalog):
 
 def printSortedVideosByViews(sortedvideos, sample, categoryname, country):
     """
-    Imprime la información de los videos con más views de un país
+    Imprime la información de los videos con más 'views' de un país
     y categoría específica
     """
     size = int(lt.size(sortedvideos))
@@ -93,7 +93,7 @@ def printSortedVideosByViews(sortedvideos, sample, categoryname, country):
 
 def printSortedVideosByLikes(sortedvideos, sample, country, tag):
     """
-    Imprime la información de los videos con más likes de un país
+    Imprime la información de los videos con más 'likes' de un país
     con un tag específico
     """
     size = int(lt.size(sortedvideos))
@@ -107,6 +107,30 @@ def printSortedVideosByLikes(sortedvideos, sample, country, tag):
             video['publish_time'] + "  Views: " + video['views'] + "  Likes: " + video['likes'] + "  Dislikes:  " +
             video['dislikes'] + "  Tags: " + video['tags'])
             i += 1
+
+def printFirstVideoByTrendingDaysByCountry(firstVideoByTrendingDays, country):
+    """
+    Imprime la información del video con más 'trending days' de un país
+    específico
+    """
+    video = firstVideoByTrendingDays[0]
+    trendingDays = firstVideoByTrendingDays[1]
+    print("El video con más trending days del país " + str(country) +
+    " es: ")
+    print("Título: " + video['title'] + "  Canal: " + video['channel_title'] + "  País: " + video['country'] +
+    "  Días de tendencia: " + str(trendingDays))
+
+def printFirstVideoByTrendingDaysByCategory(firstVideoByTrendingDays, categoryid, categoryname):
+    """
+    Imprime la información del video con más 'trending days' de una
+    categoría específica
+    """
+    video = firstVideoByTrendingDays[0]
+    trendingDays = firstVideoByTrendingDays[1]
+    print("El video con más trending days de la categoría " + str(categoryname) +
+    " es: ")
+    print("Título: " + video['title'] + "  Canal: " + video['channel_title'] + "  Categoría: " + str(categoryid) +
+    "  Días de tendencia: " + str(trendingDays))
 
 catalog = None
 
@@ -140,10 +164,16 @@ while True:
         country = str(input("Ingrese el país\n"))
         videos = controller.getVideosByCountry(catalog, country)
         sortedVideos = controller.sortVideosById(videos)
+        firstVideoByTrendingDays = controller.getFirstVideoByTrendingDays(sortedVideos)
+        printFirstVideoByTrendingDaysByCountry(firstVideoByTrendingDays, country)
 
     elif int(inputs[0]) == 4:
         categoryname = str(input("Ingrese la categoría\n"))
         categoryid = controller.getCategoryId(catalog, categoryname)
+        videos = controller.getVideosByCategory(catalog, categoryid)
+        sortedVideos = controller.sortVideosById(videos)
+        firstVideoByTrendingDays = controller.getFirstVideoByTrendingDays(sortedVideos)
+        printFirstVideoByTrendingDaysByCategory(firstVideoByTrendingDays, categoryid, categoryname)
 
     elif int(inputs[0]) == 5:
         country = str(input("Ingrese el país\n"))
