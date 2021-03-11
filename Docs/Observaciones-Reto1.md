@@ -47,5 +47,5 @@ __Requerimiento 4__
 
 | Función | Complejidad | Descripción |
 | --- | --- | --- |
-| ```getVideosByCountryAndTag()``` | O(n) | La función crea un ```ARRAY_LIST```; luego recorre la lista de videos del catálogo en busca de los videos con 'country' y 'tag' dados por parámetro y agrega dichos videos al ```ARRAY_LIST``` creado inicialmente. |
+| ```getVideosByCountryAndTag()``` | O(n) | La función crea un ```ARRAY_LIST```; luego recorre la lista de videos del catálogo en busca de los videos con 'country' y 'tag' ingresados por parámetro y agrega dichos videos al ```ARRAY_LIST``` creado inicialmente. |
 | ```sortVideosByLikes()``` | O(n log n) | La función ordena el catálogo de videos por su número de 'likes' usando el algoritmo de ordenamiento ```mergesort```. |
