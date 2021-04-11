@@ -20,6 +20,8 @@
  * along withthis program.  If not, see <http://www.gnu.org/licenses/>.
  """
 
+import time
+import tracemalloc
 import config as cf
 import model
 import csv
@@ -44,8 +46,23 @@ def loadData(catalog):
     """
     Carga los datos en los archivos y carga los datos en las estructuras
     """
+    deltatime = -1.0
+    deltamemory = -1.0
+
+    tracemalloc.start()
+    starttime = getTime()
+    startmemory = getMemory()
+
     loadVideos(catalog)
     loadCategoryId(catalog)
+
+    stopmemory = getMemory()
+    stoptime = getTime()
+    tracemalloc.stop()
+
+    deltatime = stoptime - starttime
+    deltamemory = deltaMemory(startmemory, stopmemory)
+    return deltatime, deltamemory
 
 def loadVideos(catalog):
     """
@@ -71,19 +88,64 @@ def sortVideosByViews(catalog):
     """
     Ordena los videos por 'views'
     """
-    return model.sortVideosByViews(catalog)
+    deltatime = -1.0
+    deltamemory = -1.0
+
+    tracemalloc.start()
+    starttime = getTime()
+    startmemory = getMemory()
+    
+    sortedvideos = model.sortVideosByViews(catalog)
+
+    stopmemory = getMemory()
+    stoptime = getTime()
+    tracemalloc.stop()
+
+    deltatime = stoptime - starttime
+    deltamemory = deltaMemory(startmemory, stopmemory)
+    return sortedvideos, deltatime, deltamemory
 
 def sortVideosById(catalog):
     """
     Ordena los videos por 'video_id'
     """
-    return model.sortVideosById(catalog)
+    deltatime = -1.0
+    deltamemory = -1.0
+
+    tracemalloc.start()
+    starttime = getTime()
+    startmemory = getMemory()
+
+    sortedvideos = model.sortVideosById(catalog)
+
+    stopmemory = getMemory()
+    stoptime = getTime()
+    tracemalloc.stop()
+
+    deltatime = stoptime - starttime
+    deltamemory = deltaMemory(startmemory, stopmemory)
+    return sortedvideos, deltatime, deltamemory
 
 def sortVideosByLikes(catalog):
     """
     Ordena los videos por 'likes'
     """
-    return model.sortVideosByLikes(catalog)
+    deltatime = -1.0
+    deltamemory = -1.0
+
+    tracemalloc.start()
+    starttime = getTime()
+    startmemory = getMemory()
+
+    sortedvideos = model.sortVideosByLikes(catalog)
+
+    stopmemory = getMemory()
+    stoptime = getTime()
+    tracemalloc.stop()
+
+    deltatime = stoptime - starttime
+    deltamemory = deltaMemory(startmemory, stopmemory)
+    return sortedvideos, deltatime, deltamemory
 
 # Funciones de consulta sobre el catálogo
 
@@ -97,28 +159,130 @@ def getVideosByCategory(catalog, categoryid):
     """
     Retorna los videos de la categoría seleccionada
     """
-    return model.getVideosByCategory(catalog, categoryid)
+    deltatime = -1.0
+    deltamemory = -1.0
+
+    tracemalloc.start()
+    starttime = getTime()
+    startmemory = getMemory()
+
+    videos = model.getVideosByCategory(catalog, categoryid)
+
+    stopmemory = getMemory()
+    stoptime = getTime()
+    tracemalloc.stop()
+
+    deltatime = stoptime - starttime
+    deltamemory = deltaMemory(startmemory, stopmemory)
+    return videos, deltatime, deltamemory
 
 def getVideosByCountry(catalog, country):
     """
     Retorna los videos del país seleccionado
     """
-    return model.getVideosByCountry(catalog, country)
+    deltatime = -1.0
+    deltamemory = -1.0
+
+    tracemalloc.start()
+    starttime = getTime()
+    startmemory = getMemory()
+
+    videos = model.getVideosByCountry(catalog, country)
+
+    stopmemory = getMemory()
+    stoptime = getTime()
+    tracemalloc.stop()
+
+    deltatime = stoptime - starttime
+    deltamemory = deltaMemory(startmemory, stopmemory)
+    return videos, deltatime, deltamemory
 
 def getVideosByCategoryAndCountry(catalog, categoryid, country):
     """
     Retorna los videos de la categoría y país seleccionados
     """
-    return model.getVideosByCategoryAndCountry(catalog, categoryid, country)
+    deltatime = -1.0
+    deltamemory = -1.0
+
+    tracemalloc.start()
+    starttime = getTime()
+    startmemory = getMemory()
+
+    videos = model.getVideosByCategoryAndCountry(catalog, categoryid, country)
+
+    stopmemory = getMemory()
+    stoptime = getTime()
+    tracemalloc.stop()
+
+    deltatime = stoptime - starttime
+    deltamemory = deltaMemory(startmemory, stopmemory)
+    return videos, deltatime, deltamemory
 
 def getVideosByCountryAndTag(catalog, country, tag):
     """
     Retorna los videos del país y tag seleccionados
     """
-    return model.getVideosByCountryAndTag(catalog, country, tag)
+    deltatime = -1.0
+    deltamemory = -1.0
+
+    tracemalloc.start()
+    starttime = getTime()
+    startmemory = getMemory()
+
+    videos = model.getVideosByCountryAndTag(catalog, country, tag)
+
+    stopmemory = getMemory()
+    stoptime = getTime()
+    tracemalloc.stop()
+
+    deltatime = stoptime - starttime
+    deltamemory = deltaMemory(startmemory, stopmemory)
+    return videos, deltatime, deltamemory
 
 def getFirstVideoByTrendingDays(catalog):
     """
     Retorna la información del video con más 'trending days'
     """
-    return model.getFirstVideoByTrendingDays(catalog)
+    deltatime = -1.0
+    deltamemory = -1.0
+
+    tracemalloc.start()
+    starttime = getTime()
+    startmemory = getMemory()
+
+    videos = model.getFirstVideoByTrendingDays(catalog)
+
+    stopmemory = getMemory()
+    stoptime = getTime()
+    tracemalloc.stop()
+
+    deltatime = stoptime - starttime
+    deltamemory = deltaMemory(startmemory, stopmemory)
+    return videos, deltatime, deltamemory
+
+# Funciones para medir tiempo y memoria
+
+def getTime():
+    """
+    Retorna el instante de tiempo de procesamiento en
+    milisegundos
+    """
+    return float(time.perf_counter()*1000)
+
+def getMemory():
+    """
+    Retorna la memoria alocada en un instante de tiempo
+    """
+    return tracemalloc.take_snapshot()
+
+def deltaMemory(startmemory, stopmemory):
+    """
+    Retorna la diferencia de memoria alocada entre dos instantes
+    de tiempo en bytes
+    """
+    memorydiff = stopmemory.compare_to(startmemory, 'filename')
+    deltamemory = 0.0
+    for stat in memorydiff:
+        deltamemory = deltamemory + stat.size_diff
+    deltamemory = deltamemory/1024.0
+    return deltamemory

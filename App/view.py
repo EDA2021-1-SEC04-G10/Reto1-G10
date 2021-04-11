@@ -54,7 +54,7 @@ def loadData(catalog):
     """
     Carga la información de los videos al catálogo
     """
-    controller.loadData(catalog)
+    return controller.loadData(catalog)
 
 def printFirstVideo(catalog):
     """
@@ -132,6 +132,14 @@ def printFirstVideoByTrendingDaysByCategory(firstVideoByTrendingDays, categoryid
     print("Título: " + video['title'] + "  Canal: " + video['channel_title'] + "  Categoría: " + str(categoryid) +
     "  Días de tendencia: " + str(trendingDays))
 
+def printTimeandMemory(time, memory):
+    """
+    Imprime el tiempo de procesamiento en milisegundos
+    y la memoria alocada en bytes
+    """
+    print("Tiempo [ms]: " + f"{time:.3f}" + "  |  " + "Memoria [kB]: " +
+    f"{memory:.3f}" + "\n")
+
 catalog = None
 
 """
@@ -143,10 +151,11 @@ while True:
     if int(inputs[0]) == 1:
         print("Cargando información de los archivos ....")
         catalog = initCatalog()
-        loadData(catalog)
+        data = loadData(catalog)
         print("El número de videos cargados es: " + str(lt.size(catalog['videos'])))
         printFirstVideo(catalog)
         printCategoryList(catalog)
+        printTimeandMemory(data[0], data[1])
 
     elif int(inputs[0]) == 2:
         categoryname = str(input("Ingrese la categoría\n"))
@@ -154,37 +163,49 @@ while True:
         country = str(input("Ingrese el país\n"))
         size = int(input("Ingrese el número de videos a listar\n"))
         videos = controller.getVideosByCategoryAndCountry(catalog, categoryid, country)
-        sortedVideos = controller.sortVideosByViews(videos)
-        if size > lt.size(videos):
+        sortedVideos = controller.sortVideosByViews(videos[0])
+        time = videos[1] + sortedVideos[1]
+        memory = videos[2] + videos[2]
+        if size > lt.size(videos[0]):
             print("El número de videos excede el tamaño del catálogo\n")
         else:
-            printSortedVideosByViews(sortedVideos, size, categoryname, country)
+            printSortedVideosByViews(sortedVideos[0], size, categoryname, country)
+            printTimeandMemory(time, memory)
 
     elif int(inputs[0]) == 3:
         country = str(input("Ingrese el país\n"))
         videos = controller.getVideosByCountry(catalog, country)
-        sortedVideos = controller.sortVideosById(videos)
-        firstVideoByTrendingDays = controller.getFirstVideoByTrendingDays(sortedVideos)
-        printFirstVideoByTrendingDaysByCountry(firstVideoByTrendingDays, country)
+        sortedVideos = controller.sortVideosById(videos[0])
+        firstVideoByTrendingDays = controller.getFirstVideoByTrendingDays(sortedVideos[0])
+        time = videos[1] + sortedVideos[1] + firstVideoByTrendingDays[1]
+        memory = videos[2] + sortedVideos[2] + firstVideoByTrendingDays[2]
+        printFirstVideoByTrendingDaysByCountry(firstVideoByTrendingDays[0], country)
+        printTimeandMemory(time, memory)
 
     elif int(inputs[0]) == 4:
         categoryname = str(input("Ingrese la categoría\n"))
         categoryid = controller.getCategoryId(catalog, categoryname)
         videos = controller.getVideosByCategory(catalog, categoryid)
-        sortedVideos = controller.sortVideosById(videos)
-        firstVideoByTrendingDays = controller.getFirstVideoByTrendingDays(sortedVideos)
-        printFirstVideoByTrendingDaysByCategory(firstVideoByTrendingDays, categoryid, categoryname)
+        sortedVideos = controller.sortVideosById(videos[0])
+        firstVideoByTrendingDays = controller.getFirstVideoByTrendingDays(sortedVideos[0])
+        time = videos[1] + sortedVideos[1] + firstVideoByTrendingDays[1]
+        memory = videos[2] + sortedVideos[2] + firstVideoByTrendingDays[2]
+        printFirstVideoByTrendingDaysByCategory(firstVideoByTrendingDays[0], categoryid, categoryname)
+        printTimeandMemory(time, memory)
 
     elif int(inputs[0]) == 5:
         country = str(input("Ingrese el país\n"))
         tag = str(input("Ingrese el tag\n"))
         size = int(input("Ingrese el número de videos a listar\n"))
         videos = controller.getVideosByCountryAndTag(catalog, country, tag)
-        sortedVideos = controller.sortVideosByLikes(videos)
-        if size > lt.size(videos):
+        sortedVideos = controller.sortVideosByLikes(videos[0])
+        time = videos[1] + sortedVideos[1]
+        memory = videos[2] + sortedVideos[2]
+        if size > lt.size(videos[0]):
             print("El número de videos excede el tamaño del catálogo\n")
         else:
-            printSortedVideosByLikes(sortedVideos, size, country, tag)
+            printSortedVideosByLikes(sortedVideos[0], size, country, tag)
+            printTimeandMemory(time, memory)
 
     else:
         sys.exit(0)
